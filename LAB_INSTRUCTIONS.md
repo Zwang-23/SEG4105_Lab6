@@ -2,7 +2,7 @@
 
 **Five short exercises**
 
-Use Git to manage a small SaaS project's scope and release planning documents. Create two versions, synchronize a team update, merge a release checklist and undo one temporary mistake.
+Clone a common SaaS project baseline, record a scope change, synchronize team updates, integrate a release checklist and correct local and shared mistakes. The five exercises cover every command in the five required Git pipelines.
 
 ## Submission
 
@@ -14,7 +14,7 @@ Have Git installed and a GitHub account ready. Use Git Bash on Windows so the co
 
 Create an empty PUBLIC GitHub repository named SEG4105_Lab6 in your own account: click the + menu, New repository, enter the name, choose Public and click Create repository. Leave README, .gitignore and license initialization unchecked.
 
-Create an empty folder named SEG4105_Lab6 on your computer. Open that folder in File Explorer, right-click its blank area and choose Open Git Bash here. Open the same folder in your text editor. All local commands and edits below stay in this one folder.
+Create a folder named Lab6_Work on your computer. Open it in File Explorer, right-click its blank area and choose Open Git Bash here. Exercise 1 creates an empty init-demo example and clones the actual project into SEG4105_Lab6. After the cd command, all remaining edits and commands stay inside SEG4105_Lab6.
 
 When creating README.md or release-checklist.md, use those exact names. In Windows Notepad, choose Save as type All files so the file does not become README.md.txt. Save file edits before running Git commands.
 
@@ -22,17 +22,41 @@ When creating README.md or release-checklist.md, use those exact names. In Windo
 
 Text labelled Editor is typed into the named file, not into the terminal. Text labelled Terminal is run in Git Bash. Replace YOUR-USERNAME, YOUR-NAME and YOUR-GIT-EMAIL with your own values. The commands do not include a prompt symbol to copy.
 
-Public instructor example: https://github.com/Zwang-23/SEG4105_Lab6. The example is already completed; create your own empty repository for the exercises.
+Starter: https://github.com/Zwang-23/SEG4105_Lab6 on main. Guide and downloads: the lab-guide branch. Completed example: the worked-example branch. Clone main for your work, and publish your changes to your own empty public repository.
 
-# Exercise 1 Set up a shared project repository
+# Exercise 1 Clone the shared project baseline
 
 **Repository Setup Pipeline**
 
-Management purpose: establish a shared starting baseline for the project.
+Management purpose: retrieve the shared baseline and connect it to your own submission repository.
 
-## 1 Editor create README md
+## 1 Terminal initialize an example and clone the project
 
-In your local SEG4105_Lab6 folder, create README.md. Type these three lines exactly and save the file.
+Start in Lab6_Work. init-demo is only an empty initialization example. The cloned SEG4105_Lab6 folder is the project you will edit.
+
+```bash
+git init init-demo
+git clone https://github.com/Zwang-23/SEG4105_Lab6.git SEG4105_Lab6
+cd SEG4105_Lab6
+git config user.name "YOUR-NAME"
+git config user.email "YOUR-GIT-EMAIL"
+```
+
+## 2 Terminal connect your own public repository
+
+Rename the instructor remote to upstream, then add your own empty repository as origin. Replace YOUR-USERNAME in the second command with your GitHub username.
+
+```bash
+git remote rename origin upstream
+git remote add origin https://github.com/YOUR-USERNAME/SEG4105_Lab6.git
+git remote -v
+git push -u origin main
+git log --oneline -1
+```
+
+## 3 Editor check the starter file
+
+Open the cloned SEG4105_Lab6 folder in your editor. README.md should already contain these three lines; leave them unchanged in this exercise.
 
 ```text
 # Tenant Portal
@@ -40,40 +64,19 @@ Version: v1
 Scope: sign-in and dashboard.
 ```
 
-## 2 Terminal initialize and commit
-
-```bash
-git init -b main
-git config user.name "YOUR-NAME"
-git config user.email "YOUR-GIT-EMAIL"
-git add README.md
-git commit -m "BASELINE: record project scope v1"
-```
-
-## 3 Terminal connect and upload
-
-Replace YOUR-USERNAME in this URL with your GitHub username. Use the empty repository you created before the lab.
-
-```bash
-git remote add origin https://github.com/YOUR-USERNAME/SEG4105_Lab6.git
-git push -u origin main
-```
-
-## 4 Browser view the public baseline
-
-Open your repository page and refresh it. It should display README.md and the three lines you saved. Capture S1 now.
+Capture S1 in the terminal. Open your own GitHub repository to confirm that the inherited baseline is published and the repository is public.
 
 ## Check the result
 
-The first commit is on GitHub and the repository is public. Your local folder remains the working folder for Exercise 2.
+upstream points to the instructor repository; origin points to your own public repository. Continue working inside SEG4105_Lab6. You do not need to enter init-demo again.
 
 ## Answer in one or two sentences
 
-Why is a shared versioned repository useful to a software development team?
+How do init and clone differ, and why does the team use a common starter project?
 
 ## Take one screenshot
 
-S1: your GitHub repository page after the first push. Show the public repository name and README content in the same screenshot.
+S1: one terminal screenshot showing successful clone output, git remote -v and git log --oneline -1. The origin URL must point to your own public repository.
 
 # Exercise 2 Record a scope change
 
@@ -178,16 +181,17 @@ Why should a team member pull the shared project plan before continuing work?
 
 S3: one terminal screenshot showing the successful pull and push output. Scroll or resize the terminal so both are readable.
 
-# Exercise 4 Merge a release checklist
+# Exercise 4 Prepare and integrate a release checklist
 
 **Feature Lifecycle Pipeline**
 
-Management purpose: prepare release checks on a branch and integrate them into the shared project.
+Management purpose: integrate a release checklist with the updated project plan.
 
 ## 1 Terminal create the feature branch
 
 ```bash
-git switch -c feature/release-checklist
+git branch feature/release-checklist
+git switch feature/release-checklist
 ```
 
 ## 2 Editor create release checklist md
@@ -201,81 +205,128 @@ In the same local folder, create a NEW file named release-checklist.md. Type the
 - Release manager checks test results.
 ```
 
-## 3 Terminal commit and merge
+## 3 Terminal store and restore the unfinished draft
 
 ```bash
+git stash push -u -m "Draft release checklist"
+git stash pop
 git add release-checklist.md
 git commit -m "FEATURE: add release checklist"
+```
+
+The new file disappears while stashed and returns after pop. The -u option includes the new, untracked file.
+
+## 4 Update main then rebase the unpublished feature
+
+```bash
+git switch main
+```
+
+Editor: append "Release owner: project manager." to README.md and save.
+
+```bash
+git add README.md
+git commit -m "PLAN: name the release owner"
+git switch feature/release-checklist
+git rebase main
+```
+
+Rebase should succeed: main changed README.md while the feature added a different file.
+
+## 5 Terminal integrate and publish
+
+```bash
 git switch main
 git merge --no-ff --no-edit feature/release-checklist
 git push
-```
-
-The merge options create a visible merge commit and use its default message without opening a text editor. No conflict is expected because only the feature branch added this file.
-
-## 4 Terminal show the integration
-
-```bash
 git log --graph --oneline --decorate -5
 cat release-checklist.md
 ```
 
-Capture S4. cat displays the file contents in Git Bash. Refresh GitHub to see release-checklist.md on main.
+Capture S4. The checklist describes planned checks, not executed test results.
 
 ## Check the result
 
-The branch graph records the integration, and main contains the checklist. The checklist states planned checks; this lab does not execute application tests.
+main contains the release owner and the rebased checklist, with a merge commit recording integration.
 
 ## Answer in one or two sentences
 
-Why use a separate branch when preparing a release checklist?
+How do branch, rebase and merge help a manager integrate a feature?
 
 ## Take one screenshot
 
-S4: one terminal screenshot showing the branch graph and release-checklist.md content.
+S4: one terminal screenshot showing successful rebase output, the final branch graph and release-checklist.md content.
 
-# Exercise 5 Undo an uncommitted edit
+# Exercise 5 Inspect and correct project records
 
 **Correction Pipeline**
 
-Management purpose: inspect and undo a mistaken document edit before it enters the shared baseline.
+Management purpose: inspect responsibility for changes, undo local edits and correct a shared project record.
 
-## 1 Editor add one temporary line
+## 1 Terminal inspect the project history
 
-Open the LOCAL README.md in the same folder. Go to the end of the file and add exactly this new line, then save:
+```bash
+git log --oneline -3
+git blame -L 1,3 README.md
+```
+
+log lists commits; blame identifies which commit last changed each displayed line. It records change attribution, not personal fault.
+
+## 2 Editor and terminal discard an uncommitted edit
+
+Append this exact line to local README.md and save. Do not stage or commit it:
 
 ```text
 TEMP: accidental edit for Lab 6.
 ```
 
-For this exercise, do not run git add, git commit or git push after adding the temporary line.
-
-## 2 Terminal inspect the edit
-
 ```bash
 git diff -- README.md
+git restore README.md
 ```
 
-You should see a line beginning with +TEMP: accidental edit for Lab 6. The plus sign is produced by Git to mark added text; it is not part of the line you typed.
+The diff shows +TEMP. After restore, reopen README.md: the TEMP line is gone and earlier project records remain.
 
-## 3 Terminal discard just that file edit
+## 3 Editor and terminal reopen a local draft commit
+
+Append this exact line to README.md and save:
+
+```text
+Release decision: skip all tests.
+```
 
 ```bash
-git restore README.md
-cat README.md
+git add README.md
+git commit -m "LOCAL: draft release decision"
+git reset --soft HEAD~1
+git diff --staged -- README.md
+```
+
+Do not push the LOCAL commit. Soft reset moves the branch back one commit and retains the change in the staging area. The staged diff must still show the added Release decision line.
+
+## 4 Terminal reverse a shared error
+
+Reuse that staged change to publish the deliberate error, then immediately reverse it. No additional file edit is needed.
+
+```bash
+git commit -m "ERROR: skip release tests"
+git push
+git revert --no-edit HEAD
+git push
+git log --oneline -2
 git status --short
 ```
 
-Reopen README.md if needed. The TEMP line should be gone, while the earlier scope and team updates remain. git status --short should print nothing because the working folder is clean. Capture S5 with the earlier diff and this result visible in one terminal view.
+The final log must show an ERROR commit and a new Revert commit. Reopen README.md: the skip-all-tests line is gone. Empty short-status output means the working folder is clean. Capture S5 with the earlier staged diff and the final log and status visible.
 
 ## Check the result
 
-The temporary edit was discarded. The earlier committed project records and their history remain intact.
+restore discarded an uncommitted edit; reset --soft reopened an unpushed draft; revert recorded the correction to the pushed error. The shared history retains the audit trail.
 
 ## Answer in one or two sentences
 
-Why should a team inspect a document change before discarding it?
+Why use revert for a shared mistake, but restore or reset for local corrections?
 
 ## Take one screenshot
 
-S5: one terminal screenshot showing the temporary line in git diff, followed by the restored README and clean status.
+S5: one terminal screenshot showing the staged diff after soft reset, the ERROR and Revert commits, and the final clean status.
