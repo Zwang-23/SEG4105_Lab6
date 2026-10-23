@@ -152,6 +152,8 @@ Click Commit changes. Enter the message "TEAM: assign CSV export testing to QA",
 
 ## 2 Terminal fetch and pull
 
+Enlarge the terminal before continuing. Keep this same terminal open until S3 is captured so the original pull and push output remains available.
+
 ```bash
 git fetch origin
 git pull --ff-only
@@ -230,7 +232,7 @@ The new file disappears while stashed and returns after pop. The -u option inclu
 git switch main
 ```
 
-Editor: append "Release owner: project manager." to README.md and save.
+Editor: open README.md. Add a new last line containing Release owner: project manager. Do not type quotation marks. Save the file.
 
 ```bash
 git add README.md
