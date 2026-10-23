@@ -10,17 +10,23 @@ Submit your public GitHub repository URL and one PDF report with exactly five sh
 
 ## Preparation
 
-Have Git installed and a GitHub account ready. Use Git Bash on Windows so the commands in this handout match your terminal. Complete GitHub sign-in before starting.
+Have Git installed and a GitHub account ready. Run the commands in Git Bash on Windows, or Terminal on macOS/Linux. Use any plain-text editor for file edits. If the first push opens a GitHub sign-in prompt, complete sign-in and return to the terminal.
 
 Create an empty PUBLIC GitHub repository named SEG4105_Lab6 in your own account: click the + menu, New repository, enter the name, choose Public and click Create repository. Leave README, .gitignore and license initialization unchecked.
 
-Create a folder named Lab6_Work on your computer. Open it in File Explorer, right-click its blank area and choose Open Git Bash here. Exercise 1 creates an empty init-demo example and clones the actual project into SEG4105_Lab6. After the cd command, all remaining edits and commands stay inside SEG4105_Lab6.
+Create a folder named Lab6_Work on your computer. On Windows, open it in File Explorer, right-click its blank area (Show more options if needed) and choose Open Git Bash here. On macOS/Linux, open Terminal in that folder. Exercise 1 clones the project into SEG4105_Lab6; after cd, keep all later commands in that project folder.
 
 When creating README.md or release-checklist.md, use those exact names. In Windows Notepad, choose Save as type All files so the file does not become README.md.txt. Save file edits before running Git commands.
+
+## Optional VS Code setup
+
+You may use desktop VS Code for editing and its integrated terminal for commands. Open Lab6_Work with File > Open Folder. On Windows, use Ctrl+Shift+P > Terminal: Select Default Profile > Git Bash, then Terminal > New Terminal. After Exercise 1, open the cloned SEG4105_Lab6 folder and start a new terminal there. VS Code is optional; the commands are the same.
 
 ## How to follow the handout
 
 Text labelled Editor is typed into the named file, not into the terminal. Text labelled Terminal is run in Git Bash. Replace YOUR-USERNAME, YOUR-NAME and YOUR-GIT-EMAIL with your own values. The commands do not include a prompt symbol to copy.
+
+Run commands in order. Save each file edit (Ctrl+S on Windows) before returning to the terminal. If Git opens a viewer showing (END), press q. For each screenshot, show the commands named in its caption and their output; enlarge the terminal or scroll as needed. No screenshot of your editor is required.
 
 Starter: https://github.com/Zwang-23/SEG4105_Lab6 on main. Guide and downloads: the lab-guide branch. Completed example: the worked-example branch. Clone main for your work, and publish your changes to your own empty public repository.
 
@@ -54,6 +60,8 @@ git push -u origin main
 git log --oneline -1
 ```
 
+Capture S1 now, before opening another folder or terminal. If needed, rerun git remote -v and git log --oneline -1 so both results fit in one screenshot.
+
 ## 3 Editor check the starter file
 
 Open the cloned SEG4105_Lab6 folder in your editor. README.md should already contain these three lines; leave them unchanged in this exercise.
@@ -64,7 +72,7 @@ Version: v1
 Scope: sign-in and dashboard.
 ```
 
-Capture S1 in the terminal. Open your own GitHub repository to confirm that the inherited baseline is published and the repository is public.
+Open your own GitHub repository to confirm that the inherited baseline is published and the repository is public.
 
 ## Check the result
 
@@ -76,7 +84,7 @@ How do init and clone differ, and why does the team use a common starter project
 
 ## Take one screenshot
 
-S1: one terminal screenshot showing successful clone output, git remote -v and git log --oneline -1. The origin URL must point to your own public repository.
+S1: one terminal screenshot showing git remote -v and git log --oneline -1. The origin URL must point to your own public repository.
 
 # Exercise 2 Record a scope change
 
@@ -134,7 +142,7 @@ Management purpose: exchange an update about who will test the new feature. You 
 
 ## 1 Browser add the team update
 
-On YOUR repository page, click README.md, then the pencil button Edit this file. Add this exact new line at the end of the file:
+Open YOUR own repository on GitHub, select main, click README.md, then the pencil button Edit this file. On a new line after the existing content, add:
 
 ```text
 Team update: QA will test CSV export.
@@ -196,7 +204,7 @@ git switch feature/release-checklist
 
 ## 2 Editor create release checklist md
 
-In the same local folder, create a NEW file named release-checklist.md. Type these four lines and save:
+Create a NEW file named release-checklist.md in the project root, beside README.md. Type these four lines and save:
 
 ```text
 # Release checklist
@@ -243,7 +251,7 @@ git log --graph --oneline --decorate -5
 cat release-checklist.md
 ```
 
-Capture S4. The checklist describes planned checks, not executed test results.
+Capture S4 after the final log and cat commands. You may rerun those two commands to place their output together.
 
 ## Check the result
 
@@ -255,7 +263,7 @@ How do branch, rebase and merge help a manager integrate a feature?
 
 ## Take one screenshot
 
-S4: one terminal screenshot showing successful rebase output, the final branch graph and release-checklist.md content.
+S4: one terminal screenshot showing the final branch graph and release-checklist.md content.
 
 # Exercise 5 Inspect and correct project records
 
@@ -314,10 +322,11 @@ git push
 git revert --no-edit HEAD
 git push
 git log --oneline -2
+cat README.md
 git status --short
 ```
 
-The final log must show an ERROR commit and a new Revert commit. Reopen README.md: the skip-all-tests line is gone. Empty short-status output means the working folder is clean. Capture S5 with the earlier staged diff and the final log and status visible.
+The log shows ERROR and Revert commits. README.md no longer contains the skip-all-tests line. Empty short-status output means the working folder is clean. For S5, rerun only the final log, cat and status commands if needed; include the status command and the next terminal prompt to show it returned no output.
 
 ## Check the result
 
@@ -329,4 +338,4 @@ Why use revert for a shared mistake, but restore or reset for local corrections?
 
 ## Take one screenshot
 
-S5: one terminal screenshot showing the staged diff after soft reset, the ERROR and Revert commits, and the final clean status.
+S5: one terminal screenshot showing the ERROR and Revert commits, the final README.md content and git status --short with no output.
